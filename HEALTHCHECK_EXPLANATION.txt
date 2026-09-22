@@ -1,0 +1,23 @@
+# Healthcheck Explanation
+
+Docker Healthcheck được dùng để kiểm tra xem một service đã thực sự sẵn sàng hoạt động hay chưa.
+
+## PostgreSQL
+
+Healthcheck sử dụng lệnh:
+
+`pg_isready -U admin -d storex_db`
+
+Lệnh này kiểm tra PostgreSQL đã chấp nhận kết nối chưa. Docker sẽ kiểm tra mỗi 5 giây, tối đa 5 lần sau thời gian chờ khởi động 10 giây.
+
+## Redis
+
+Healthcheck sử dụng:
+
+`redis-cli ping`
+
+Nếu Redis trả về `PONG` thì Docker đánh dấu container là Healthy.
+
+## depends_on với service_healthy
+
+Backend chỉ khởi động khi PostgreSQL và Redis đều ở trạng thái Healthy, giúp tránh lỗi kết nối khi các service chưa sẵn sàng.
